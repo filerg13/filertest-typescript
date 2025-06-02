@@ -12,17 +12,13 @@ export class Ohlc extends APIResource {
    *
    * @example
    * ```ts
-   * const response = await client.coins.ohlc.retrieveByID(
-   *   'bitcoin',
-   *   { days: '1', vs_currency: 'usd' },
-   * );
+   * const ohlcs = await client.coins.ohlc.get('bitcoin', {
+   *   days: '1',
+   *   vs_currency: 'usd',
+   * });
    * ```
    */
-  retrieveByID(
-    id: string,
-    query: OhlcRetrieveByIDParams,
-    options?: RequestOptions,
-  ): APIPromise<OhlcRetrieveByIDResponse> {
+  get(id: string, query: OhlcGetParams, options?: RequestOptions): APIPromise<OhlcGetResponse> {
     return this._client.get(path`/coins/${id}/ohlc`, { query, ...options });
   }
 
@@ -32,32 +28,26 @@ export class Ohlc extends APIResource {
    *
    * @example
    * ```ts
-   * const response =
-   *   await client.coins.ohlc.retrieveWithinTimeRangeByID(
-   *     'bitcoin',
-   *     {
-   *       from: 0,
-   *       interval: 'daily',
-   *       to: 0,
-   *       vs_currency: 'usd',
-   *     },
-   *   );
+   * const response = await client.coins.ohlc.getRange(
+   *   'bitcoin',
+   *   { from: 0, interval: 'daily', to: 0, vs_currency: 'usd' },
+   * );
    * ```
    */
-  retrieveWithinTimeRangeByID(
+  getRange(
     id: string,
-    query: OhlcRetrieveWithinTimeRangeByIDParams,
+    query: OhlcGetRangeParams,
     options?: RequestOptions,
-  ): APIPromise<OhlcRetrieveWithinTimeRangeByIDResponse> {
+  ): APIPromise<OhlcGetRangeResponse> {
     return this._client.get(path`/coins/${id}/ohlc/range`, { query, ...options });
   }
 }
 
-export type OhlcRetrieveByIDResponse = Array<Array<number>>;
+export type OhlcGetResponse = Array<Array<number>>;
 
-export type OhlcRetrieveWithinTimeRangeByIDResponse = Array<Array<number>>;
+export type OhlcGetRangeResponse = Array<Array<number>>;
 
-export interface OhlcRetrieveByIDParams {
+export interface OhlcGetParams {
   /**
    * data up to number of days ago
    */
@@ -100,7 +90,7 @@ export interface OhlcRetrieveByIDParams {
     | '18';
 }
 
-export interface OhlcRetrieveWithinTimeRangeByIDParams {
+export interface OhlcGetRangeParams {
   /**
    * starting date in UNIX timestamp
    */
@@ -125,9 +115,9 @@ export interface OhlcRetrieveWithinTimeRangeByIDParams {
 
 export declare namespace Ohlc {
   export {
-    type OhlcRetrieveByIDResponse as OhlcRetrieveByIDResponse,
-    type OhlcRetrieveWithinTimeRangeByIDResponse as OhlcRetrieveWithinTimeRangeByIDResponse,
-    type OhlcRetrieveByIDParams as OhlcRetrieveByIDParams,
-    type OhlcRetrieveWithinTimeRangeByIDParams as OhlcRetrieveWithinTimeRangeByIDParams,
+    type OhlcGetResponse as OhlcGetResponse,
+    type OhlcGetRangeResponse as OhlcGetRangeResponse,
+    type OhlcGetParams as OhlcGetParams,
+    type OhlcGetRangeParams as OhlcGetRangeParams,
   };
 }

@@ -1,13 +1,16 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-import Filertest from 'filertest';
+import Filertest from 'filertest-typescript';
 
-const client = new Filertest({ baseURL: process.env['TEST_API_BASE_URL'] ?? 'http://127.0.0.1:4010' });
+const client = new Filertest({
+  proAPIKey: 'My Pro API Key',
+  baseURL: process.env['TEST_API_BASE_URL'] ?? 'http://127.0.0.1:4010',
+});
 
 describe('resource marketChart', () => {
   // skipped: tests are disabled for the time being
-  test.skip('retrieveByTokenAddress: only required params', async () => {
-    const responsePromise = client.coins.contract.marketChart.retrieveByTokenAddress(
+  test.skip('get: only required params', async () => {
+    const responsePromise = client.coins.contract.marketChart.get(
       '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48',
       { id: 'ethereum', days: 'days', vs_currency: 'usd' },
     );
@@ -21,16 +24,16 @@ describe('resource marketChart', () => {
   });
 
   // skipped: tests are disabled for the time being
-  test.skip('retrieveByTokenAddress: required and optional params', async () => {
-    const response = await client.coins.contract.marketChart.retrieveByTokenAddress(
+  test.skip('get: required and optional params', async () => {
+    const response = await client.coins.contract.marketChart.get(
       '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48',
       { id: 'ethereum', days: 'days', vs_currency: 'usd', interval: '5m', precision: 'full' },
     );
   });
 
   // skipped: tests are disabled for the time being
-  test.skip('retrieveWithinTimeRangeByTokenAddress: only required params', async () => {
-    const responsePromise = client.coins.contract.marketChart.retrieveWithinTimeRangeByTokenAddress(
+  test.skip('getRange: only required params', async () => {
+    const responsePromise = client.coins.contract.marketChart.getRange(
       '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48',
       { id: 'ethereum', from: 0, to: 0, vs_currency: 'usd' },
     );
@@ -44,8 +47,8 @@ describe('resource marketChart', () => {
   });
 
   // skipped: tests are disabled for the time being
-  test.skip('retrieveWithinTimeRangeByTokenAddress: required and optional params', async () => {
-    const response = await client.coins.contract.marketChart.retrieveWithinTimeRangeByTokenAddress(
+  test.skip('getRange: required and optional params', async () => {
+    const response = await client.coins.contract.marketChart.getRange(
       '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48',
       { id: 'ethereum', from: 0, to: 0, vs_currency: 'usd', interval: '5m', precision: 'full' },
     );

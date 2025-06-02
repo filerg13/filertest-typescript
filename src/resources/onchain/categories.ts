@@ -12,13 +12,13 @@ export class Categories extends APIResource {
    *
    * @example
    * ```ts
-   * const categories = await client.onchain.categories.list();
+   * const category = await client.onchain.categories.get();
    * ```
    */
-  list(
-    query: CategoryListParams | null | undefined = {},
+  get(
+    query: CategoryGetParams | null | undefined = {},
     options?: RequestOptions,
-  ): APIPromise<CategoryListResponse> {
+  ): APIPromise<CategoryGetResponse> {
     return this._client.get('/onchain/categories', { query, ...options });
   }
 
@@ -28,24 +28,25 @@ export class Categories extends APIResource {
    *
    * @example
    * ```ts
-   * const response =
-   *   await client.onchain.categories.retrievePools('pump-fun');
+   * const response = await client.onchain.categories.getPools(
+   *   'pump-fun',
+   * );
    * ```
    */
-  retrievePools(
+  getPools(
     categoryID: string,
-    query: CategoryRetrievePoolsParams | null | undefined = {},
+    query: CategoryGetPoolsParams | null | undefined = {},
     options?: RequestOptions,
-  ): APIPromise<CategoryRetrievePoolsResponse> {
+  ): APIPromise<CategoryGetPoolsResponse> {
     return this._client.get(path`/onchain/categories/${categoryID}/pools`, { query, ...options });
   }
 }
 
-export interface CategoryListResponse {
-  data?: Array<CategoryListResponse.Data>;
+export interface CategoryGetResponse {
+  data?: Array<CategoryGetResponse.Data>;
 }
 
-export namespace CategoryListResponse {
+export namespace CategoryGetResponse {
   export interface Data {
     id?: string;
 
@@ -85,13 +86,13 @@ export namespace CategoryListResponse {
   }
 }
 
-export interface CategoryRetrievePoolsResponse {
-  data?: Array<CategoryRetrievePoolsResponse.Data>;
+export interface CategoryGetPoolsResponse {
+  data?: Array<CategoryGetPoolsResponse.Data>;
 
-  included?: Array<CategoryRetrievePoolsResponse.Included>;
+  included?: Array<CategoryGetPoolsResponse.Included>;
 }
 
-export namespace CategoryRetrievePoolsResponse {
+export namespace CategoryGetPoolsResponse {
   export interface Data {
     id?: string;
 
@@ -233,7 +234,7 @@ export namespace CategoryRetrievePoolsResponse {
   }
 }
 
-export interface CategoryListParams {
+export interface CategoryGetParams {
   /**
    * page through results Default value: `1`
    */
@@ -252,7 +253,7 @@ export interface CategoryListParams {
     | 'reserve_in_usd_desc';
 }
 
-export interface CategoryRetrievePoolsParams {
+export interface CategoryGetPoolsParams {
   /**
    * attributes to include, comma-separated if more than one to include Available
    * values: `base_token`, `quote_token`, `dex`, `network`. Example: `base_token` or
@@ -281,9 +282,9 @@ export interface CategoryRetrievePoolsParams {
 
 export declare namespace Categories {
   export {
-    type CategoryListResponse as CategoryListResponse,
-    type CategoryRetrievePoolsResponse as CategoryRetrievePoolsResponse,
-    type CategoryListParams as CategoryListParams,
-    type CategoryRetrievePoolsParams as CategoryRetrievePoolsParams,
+    type CategoryGetResponse as CategoryGetResponse,
+    type CategoryGetPoolsResponse as CategoryGetPoolsResponse,
+    type CategoryGetParams as CategoryGetParams,
+    type CategoryGetPoolsParams as CategoryGetPoolsParams,
   };
 }

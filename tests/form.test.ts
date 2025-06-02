@@ -1,5 +1,5 @@
-import { multipartFormRequestOptions, createForm } from 'filertest/internal/uploads';
-import { toFile } from 'filertest/core/uploads';
+import { multipartFormRequestOptions, createForm } from 'filertest-typescript/internal/uploads';
+import { toFile } from 'filertest-typescript/core/uploads';
 
 describe('form data validation', () => {
   test('valid values do not error', async () => {

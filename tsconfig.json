@@ -9,8 +9,8 @@
     "esModuleInterop": true,
     "baseUrl": "./",
     "paths": {
-      "filertest/*": ["src/*"],
-      "filertest": ["src/index.ts"]
+      "filertest-typescript/*": ["src/*"],
+      "filertest-typescript": ["src/index.ts"]
     },
     "noEmit": true,
 

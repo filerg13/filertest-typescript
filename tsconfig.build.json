@@ -5,8 +5,8 @@
   "compilerOptions": {
     "rootDir": "./dist/src",
     "paths": {
-      "filertest/*": ["dist/src/*"],
-      "filertest": ["dist/src/index.ts"]
+      "filertest-typescript/*": ["dist/src/*"],
+      "filertest-typescript": ["dist/src/index.ts"]
     },
     "noEmit": false,
     "declaration": true,

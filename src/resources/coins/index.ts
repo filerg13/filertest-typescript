@@ -2,53 +2,46 @@
 
 export {
   Categories,
-  type CategoryRetrieveListResponse,
-  type CategoryRetrieveWithMarketDataResponse,
-  type CategoryRetrieveWithMarketDataParams,
+  type CategoryGetResponse,
+  type CategoryGetListResponse,
+  type CategoryGetParams,
 } from './categories';
 export {
-  CirculatingSupplyChartResource,
-  type CirculatingSupplyChart,
-  type CirculatingSupplyChartRetrieveByIDParams,
-  type CirculatingSupplyChartRetrieveWithinTimeRangeByIDParams,
+  CirculatingSupplyChart,
+  type CirculatingSupplyChartGetResponse,
+  type CirculatingSupplyChartGetRangeResponse,
+  type CirculatingSupplyChartGetParams,
+  type CirculatingSupplyChartGetRangeParams,
 } from './circulating-supply-chart';
+export { Coins, type CoinGetIDResponse, type CoinGetIDParams } from './coins';
+export { Contract, type ContractGetResponse, type ContractGetParams } from './contract/index';
+export { History, type HistoryGetResponse, type HistoryGetParams } from './history';
+export { List, type ListGetResponse, type ListGetNewResponse, type ListGetParams } from './list';
 export {
-  Coins,
-  type CoinsData,
-  type CoinsTickers,
-  type CoinRetrieveHistoricalDataByIDResponse,
-  type CoinRetrieveTopGainersLosersResponse,
-  type CoinRetrieveWithMarketDataResponse,
-  type CoinRetrieveByIDParams,
-  type CoinRetrieveHistoricalDataByIDParams,
-  type CoinRetrieveTickersByIDParams,
-  type CoinRetrieveTopGainersLosersParams,
-  type CoinRetrieveWithMarketDataParams,
-} from './coins';
-export { Contract, type ContractRetrieveByTokenAddressParams } from './contract/index';
-export {
-  List,
-  type ListRetrieveResponse,
-  type ListRetrieveRecentlyAddedResponse,
-  type ListRetrieveParams,
-} from './list';
-export {
-  MarketChartResource,
-  type MarketChart,
-  type MarketChartRange,
-  type MarketChartRetrieveByIDParams,
-  type MarketChartRetrieveWithinTimeRangeByIDParams,
+  MarketChart,
+  type MarketChartGetResponse,
+  type MarketChartGetRangeResponse,
+  type MarketChartGetParams,
+  type MarketChartGetRangeParams,
 } from './market-chart';
+export { Markets, type MarketGetResponse, type MarketGetParams } from './markets';
 export {
   Ohlc,
-  type OhlcRetrieveByIDResponse,
-  type OhlcRetrieveWithinTimeRangeByIDResponse,
-  type OhlcRetrieveByIDParams,
-  type OhlcRetrieveWithinTimeRangeByIDParams,
+  type OhlcGetResponse,
+  type OhlcGetRangeResponse,
+  type OhlcGetParams,
+  type OhlcGetRangeParams,
 } from './ohlc';
+export { Tickers, type TickerGetResponse, type TickerGetParams } from './tickers';
 export {
-  TotalSupplyChartResource,
-  type TotalSupplyChart,
-  type TotalSupplyChartRetrieveByIDParams,
-  type TotalSupplyChartRetrieveWithinTimeRangeByIDParams,
+  TopGainersLosers,
+  type TopGainersLoserGetResponse,
+  type TopGainersLoserGetParams,
+} from './top-gainers-losers';
+export {
+  TotalSupplyChart,
+  type TotalSupplyChartGetResponse,
+  type TotalSupplyChartGetRangeResponse,
+  type TotalSupplyChartGetParams,
+  type TotalSupplyChartGetRangeParams,
 } from './total-supply-chart';

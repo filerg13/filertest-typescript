@@ -6,49 +6,35 @@ import { RequestOptions } from '../../internal/request-options';
 
 export class Categories extends APIResource {
   /**
-   * This endpoint allows you to **query all the coins categories on CoinGecko**
-   *
-   * @example
-   * ```ts
-   * const response =
-   *   await client.coins.categories.retrieveList();
-   * ```
-   */
-  retrieveList(options?: RequestOptions): APIPromise<CategoryRetrieveListResponse> {
-    return this._client.get('/coins/categories/list', options);
-  }
-
-  /**
    * This endpoint allows you to **query all the coins categories with market data
    * (market cap, volume, ...) on CoinGecko**
    *
    * @example
    * ```ts
-   * const response =
-   *   await client.coins.categories.retrieveWithMarketData();
+   * const category = await client.coins.categories.get();
    * ```
    */
-  retrieveWithMarketData(
-    query: CategoryRetrieveWithMarketDataParams | null | undefined = {},
+  get(
+    query: CategoryGetParams | null | undefined = {},
     options?: RequestOptions,
-  ): APIPromise<CategoryRetrieveWithMarketDataResponse> {
+  ): APIPromise<CategoryGetResponse> {
     return this._client.get('/coins/categories', { query, ...options });
+  }
+
+  /**
+   * This endpoint allows you to **query all the coins categories on CoinGecko**
+   *
+   * @example
+   * ```ts
+   * const response = await client.coins.categories.getList();
+   * ```
+   */
+  getList(options?: RequestOptions): APIPromise<CategoryGetListResponse> {
+    return this._client.get('/coins/categories/list', options);
   }
 }
 
-export interface CategoryRetrieveListResponse {
-  /**
-   * category ID
-   */
-  category_id?: string;
-
-  /**
-   * category name
-   */
-  name?: string;
-}
-
-export interface CategoryRetrieveWithMarketDataResponse {
+export interface CategoryGetResponse {
   /**
    * category ID
    */
@@ -95,7 +81,19 @@ export interface CategoryRetrieveWithMarketDataResponse {
   volume_24h?: number;
 }
 
-export interface CategoryRetrieveWithMarketDataParams {
+export interface CategoryGetListResponse {
+  /**
+   * category ID
+   */
+  category_id?: string;
+
+  /**
+   * category name
+   */
+  name?: string;
+}
+
+export interface CategoryGetParams {
   /**
    * sort results by field, default: market_cap_desc
    */
@@ -110,8 +108,8 @@ export interface CategoryRetrieveWithMarketDataParams {
 
 export declare namespace Categories {
   export {
-    type CategoryRetrieveListResponse as CategoryRetrieveListResponse,
-    type CategoryRetrieveWithMarketDataResponse as CategoryRetrieveWithMarketDataResponse,
-    type CategoryRetrieveWithMarketDataParams as CategoryRetrieveWithMarketDataParams,
+    type CategoryGetResponse as CategoryGetResponse,
+    type CategoryGetListResponse as CategoryGetListResponse,
+    type CategoryGetParams as CategoryGetParams,
   };
 }

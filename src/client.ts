@@ -21,95 +21,65 @@ import { type Fetch } from './internal/builtin-types';
 import { HeadersLike, NullableHeaders, buildHeaders } from './internal/headers';
 import { FinalRequestOptions, RequestOptions } from './internal/request-options';
 import {
-  AssetPlatformListParams,
-  AssetPlatformListResponse,
+  AssetPlatformGetParams,
+  AssetPlatformGetResponse,
   AssetPlatforms,
 } from './resources/asset-platforms';
-import { Companies, CompanyRetrievePublicTreasuryResponse } from './resources/companies';
-import { ExchangeRateListResponse, ExchangeRates } from './resources/exchange-rates';
-import {
-  Global,
-  GlobalRetrieveDecentralizedFinanceResponse,
-  GlobalRetrieveMarketCapChartParams,
-  GlobalRetrieveMarketCapChartResponse,
-  GlobalRetrieveResponse,
-} from './resources/global';
-import { Key, KeyRetrieveResponse } from './resources/key';
-import { Ping, PingCheckStatusResponse } from './resources/ping';
-import {
-  Search,
-  SearchQueryParams,
-  SearchQueryResponse,
-  SearchTrendingParams,
-  SearchTrendingResponse,
-} from './resources/search';
-import {
-  Simple,
-  SimpleGetPriceParams,
-  SimpleGetPriceResponse,
-  SimpleGetTokenPriceParams,
-  SimpleGetTokenPriceResponse,
-  SimpleListSupportedCurrenciesResponse,
-} from './resources/simple';
-import { TokenListRetrieveAllResponse, TokenLists } from './resources/token-lists';
+import { ExchangeRateGetResponse, ExchangeRates } from './resources/exchange-rates';
+import { Key, KeyGetResponse } from './resources/key';
+import { Ping, PingGetResponse } from './resources/ping';
+import { TokenListGetAllJsonResponse, TokenLists } from './resources/token-lists';
 import { readEnv } from './internal/utils/env';
 import { formatRequestDetails, loggerFor } from './internal/utils/log';
 import { isEmptyObj } from './internal/utils/values';
+import { CoinGetIDParams, CoinGetIDResponse, Coins } from './resources/coins/coins';
+import { Companies } from './resources/companies/companies';
+import { DerivativeGetResponse, Derivatives } from './resources/derivatives/derivatives';
 import {
-  CoinRetrieveByIDParams,
-  CoinRetrieveHistoricalDataByIDParams,
-  CoinRetrieveHistoricalDataByIDResponse,
-  CoinRetrieveTickersByIDParams,
-  CoinRetrieveTopGainersLosersParams,
-  CoinRetrieveTopGainersLosersResponse,
-  CoinRetrieveWithMarketDataParams,
-  CoinRetrieveWithMarketDataResponse,
-  Coins,
-  CoinsData,
-  CoinsTickers,
-} from './resources/coins/coins';
-import { Derivatives, TickersList } from './resources/derivatives/derivatives';
-import {
-  ExchangeListIDMapParams,
-  ExchangeListIDMapResponse,
-  ExchangeListParams,
-  ExchangeListResponse,
-  ExchangeRetrieveParams,
-  ExchangeRetrieveResponse,
-  ExchangeRetrieveTickersParams,
+  ExchangeGetIDParams,
+  ExchangeGetIDResponse,
+  ExchangeGetListParams,
+  ExchangeGetListResponse,
+  ExchangeGetParams,
+  ExchangeGetResponse,
   Exchanges,
 } from './resources/exchanges/exchanges';
+import { Global, GlobalGetResponse } from './resources/global/global';
 import {
-  NFTData,
-  NFTListParams,
-  NFTListResponse,
-  NFTListWithMarketDataParams,
-  NFTListWithMarketDataResponse,
-  NFTMarketChart,
-  NFTRetrieveMarketChartParams,
-  NFTRetrieveTickersResponse,
+  NFTGetIDResponse,
+  NFTGetListParams,
+  NFTGetListResponse,
+  NFTGetMarketsParams,
+  NFTGetMarketsResponse,
   NFTs,
 } from './resources/nfts/nfts';
 import { Onchain } from './resources/onchain/onchain';
+import { Search, SearchGetParams, SearchGetResponse } from './resources/search/search';
+import { Simple } from './resources/simple/simple';
 
 const environments = {
-  production: 'https://pro-api.coingecko.com/api/v3',
-  environment_1: 'https://api.coingecko.com/api/v3',
+  pro: 'https://pro-api.coingecko.com/api/v3',
+  demo: 'https://api.coingecko.com/api/v3',
 };
 type Environment = keyof typeof environments;
 
 export interface ClientOptions {
   /**
+   * CoinGecko Pro API Key
+   */
+  proAPIKey?: string | null | undefined;
+
+  /**
    * CoinGecko Demo API Key
    */
-  apiKey?: string | null | undefined;
+  demoAPIKey?: string | null | undefined;
 
   /**
    * Specifies the environment to use for the API.
    *
    * Each environment maps to a different base URL:
-   * - `production` corresponds to `https://pro-api.coingecko.com/api/v3`
-   * - `environment_1` corresponds to `https://api.coingecko.com/api/v3`
+   * - `pro` corresponds to `https://pro-api.coingecko.com/api/v3`
+   * - `demo` corresponds to `https://api.coingecko.com/api/v3`
    */
   environment?: Environment | undefined;
 
@@ -184,7 +154,8 @@ export interface ClientOptions {
  * API Client for interfacing with the Filertest API.
  */
 export class Filertest {
-  apiKey: string | null;
+  proAPIKey: string | null;
+  demoAPIKey: string | null;
 
   baseURL: string;
   maxRetries: number;
@@ -201,8 +172,9 @@ export class Filertest {
   /**
    * API Client for interfacing with the Filertest API.
    *
-   * @param {string | null | undefined} [opts.apiKey=process.env['FILERTEST_API_KEY'] ?? null]
-   * @param {Environment} [opts.environment=production] - Specifies the environment URL to use for the API.
+   * @param {string | null | undefined} [opts.proAPIKey=process.env['COINGECKO_PRO_API_KEY'] ?? null]
+   * @param {string | null | undefined} [opts.demoAPIKey=process.env['COINGECKO_DEMO_API_KEY'] ?? null]
+   * @param {Environment} [opts.environment=pro] - Specifies the environment URL to use for the API.
    * @param {string} [opts.baseURL=process.env['FILERTEST_BASE_URL'] ?? https://pro-api.coingecko.com/api/v3] - Override the default base URL for the API.
    * @param {number} [opts.timeout=1 minute] - The maximum amount of time (in milliseconds) the client will wait for a response before timing out.
    * @param {MergedRequestInit} [opts.fetchOptions] - Additional `RequestInit` options to be passed to `fetch` calls.
@@ -213,14 +185,16 @@ export class Filertest {
    */
   constructor({
     baseURL = readEnv('FILERTEST_BASE_URL'),
-    apiKey = readEnv('FILERTEST_API_KEY') ?? null,
+    proAPIKey = readEnv('COINGECKO_PRO_API_KEY') ?? null,
+    demoAPIKey = readEnv('COINGECKO_DEMO_API_KEY') ?? null,
     ...opts
   }: ClientOptions = {}) {
     const options: ClientOptions = {
-      apiKey,
+      proAPIKey,
+      demoAPIKey,
       ...opts,
       baseURL,
-      environment: opts.environment ?? 'production',
+      environment: opts.environment ?? 'pro',
     };
 
     if (baseURL && opts.environment) {
@@ -229,7 +203,7 @@ export class Filertest {
       );
     }
 
-    this.baseURL = options.baseURL || environments[options.environment || 'production'];
+    this.baseURL = options.baseURL || environments[options.environment || 'pro'];
     this.timeout = options.timeout ?? Filertest.DEFAULT_TIMEOUT /* 1 minute */;
     this.logger = options.logger ?? console;
     const defaultLogLevel = 'warn';
@@ -246,7 +220,8 @@ export class Filertest {
 
     this._options = options;
 
-    this.apiKey = apiKey;
+    this.proAPIKey = proAPIKey;
+    this.demoAPIKey = demoAPIKey;
   }
 
   /**
@@ -262,7 +237,8 @@ export class Filertest {
       logger: this.logger,
       logLevel: this.logLevel,
       fetchOptions: this.fetchOptions,
-      apiKey: this.apiKey,
+      proAPIKey: this.proAPIKey,
+      demoAPIKey: this.demoAPIKey,
       ...options,
     });
   }
@@ -272,7 +248,14 @@ export class Filertest {
   }
 
   protected validateHeaders({ values, nulls }: NullableHeaders) {
-    if (this.apiKey && values.get('x-cg-demo-api-key')) {
+    if (this.proAPIKey && values.get('x-cg-pro-api-key')) {
+      return;
+    }
+    if (nulls.has('x-cg-pro-api-key')) {
+      return;
+    }
+
+    if (this.demoAPIKey && values.get('x-cg-demo-api-key')) {
       return;
     }
     if (nulls.has('x-cg-demo-api-key')) {
@@ -280,15 +263,26 @@ export class Filertest {
     }
 
     throw new Error(
-      'Could not resolve authentication method. Expected the apiKey to be set. Or for the "x-cg-demo-api-key" headers to be explicitly omitted',
+      'Could not resolve authentication method. Expected either proAPIKey or demoAPIKey to be set. Or for one of the "x-cg-pro-api-key" or "x-cg-demo-api-key" headers to be explicitly omitted',
     );
   }
 
   protected authHeaders(opts: FinalRequestOptions): NullableHeaders | undefined {
-    if (this.apiKey == null) {
+    return buildHeaders([this.proKeyAuth(opts), this.demoKeyAuth(opts)]);
+  }
+
+  protected proKeyAuth(opts: FinalRequestOptions): NullableHeaders | undefined {
+    if (this.proAPIKey == null) {
       return undefined;
     }
-    return buildHeaders([{ 'x-cg-demo-api-key': this.apiKey }]);
+    return buildHeaders([{ 'x-cg-pro-api-key': this.proAPIKey }]);
+  }
+
+  protected demoKeyAuth(opts: FinalRequestOptions): NullableHeaders | undefined {
+    if (this.demoAPIKey == null) {
+      return undefined;
+    }
+    return buildHeaders([{ 'x-cg-demo-api-key': this.demoAPIKey }]);
   }
 
   /**
@@ -788,120 +782,90 @@ export class Filertest {
 
   static toFile = Uploads.toFile;
 
-  ping: API.Ping = new API.Ping(this);
-  key: API.Key = new API.Key(this);
-  simple: API.Simple = new API.Simple(this);
-  coins: API.Coins = new API.Coins(this);
   assetPlatforms: API.AssetPlatforms = new API.AssetPlatforms(this);
-  tokenLists: API.TokenLists = new API.TokenLists(this);
-  exchanges: API.Exchanges = new API.Exchanges(this);
-  derivatives: API.Derivatives = new API.Derivatives(this);
-  nfts: API.NFTs = new API.NFTs(this);
-  exchangeRates: API.ExchangeRates = new API.ExchangeRates(this);
-  search: API.Search = new API.Search(this);
-  global: API.Global = new API.Global(this);
+  coins: API.Coins = new API.Coins(this);
   companies: API.Companies = new API.Companies(this);
+  derivatives: API.Derivatives = new API.Derivatives(this);
+  exchangeRates: API.ExchangeRates = new API.ExchangeRates(this);
+  exchanges: API.Exchanges = new API.Exchanges(this);
+  global: API.Global = new API.Global(this);
+  key: API.Key = new API.Key(this);
+  nfts: API.NFTs = new API.NFTs(this);
   onchain: API.Onchain = new API.Onchain(this);
+  ping: API.Ping = new API.Ping(this);
+  search: API.Search = new API.Search(this);
+  simple: API.Simple = new API.Simple(this);
+  tokenLists: API.TokenLists = new API.TokenLists(this);
 }
-Filertest.Ping = Ping;
-Filertest.Key = Key;
-Filertest.Simple = Simple;
-Filertest.Coins = Coins;
 Filertest.AssetPlatforms = AssetPlatforms;
-Filertest.TokenLists = TokenLists;
-Filertest.Exchanges = Exchanges;
-Filertest.Derivatives = Derivatives;
-Filertest.NFTs = NFTs;
-Filertest.ExchangeRates = ExchangeRates;
-Filertest.Search = Search;
-Filertest.Global = Global;
+Filertest.Coins = Coins;
 Filertest.Companies = Companies;
+Filertest.Derivatives = Derivatives;
+Filertest.ExchangeRates = ExchangeRates;
+Filertest.Exchanges = Exchanges;
+Filertest.Global = Global;
+Filertest.Key = Key;
+Filertest.NFTs = NFTs;
 Filertest.Onchain = Onchain;
+Filertest.Ping = Ping;
+Filertest.Search = Search;
+Filertest.Simple = Simple;
+Filertest.TokenLists = TokenLists;
 export declare namespace Filertest {
   export type RequestOptions = Opts.RequestOptions;
 
-  export { Ping as Ping, type PingCheckStatusResponse as PingCheckStatusResponse };
-
-  export { Key as Key, type KeyRetrieveResponse as KeyRetrieveResponse };
-
   export {
-    Simple as Simple,
-    type SimpleGetPriceResponse as SimpleGetPriceResponse,
-    type SimpleGetTokenPriceResponse as SimpleGetTokenPriceResponse,
-    type SimpleListSupportedCurrenciesResponse as SimpleListSupportedCurrenciesResponse,
-    type SimpleGetPriceParams as SimpleGetPriceParams,
-    type SimpleGetTokenPriceParams as SimpleGetTokenPriceParams,
+    AssetPlatforms as AssetPlatforms,
+    type AssetPlatformGetResponse as AssetPlatformGetResponse,
+    type AssetPlatformGetParams as AssetPlatformGetParams,
   };
 
   export {
     Coins as Coins,
-    type CoinsData as CoinsData,
-    type CoinsTickers as CoinsTickers,
-    type CoinRetrieveHistoricalDataByIDResponse as CoinRetrieveHistoricalDataByIDResponse,
-    type CoinRetrieveTopGainersLosersResponse as CoinRetrieveTopGainersLosersResponse,
-    type CoinRetrieveWithMarketDataResponse as CoinRetrieveWithMarketDataResponse,
-    type CoinRetrieveByIDParams as CoinRetrieveByIDParams,
-    type CoinRetrieveHistoricalDataByIDParams as CoinRetrieveHistoricalDataByIDParams,
-    type CoinRetrieveTickersByIDParams as CoinRetrieveTickersByIDParams,
-    type CoinRetrieveTopGainersLosersParams as CoinRetrieveTopGainersLosersParams,
-    type CoinRetrieveWithMarketDataParams as CoinRetrieveWithMarketDataParams,
+    type CoinGetIDResponse as CoinGetIDResponse,
+    type CoinGetIDParams as CoinGetIDParams,
   };
 
-  export {
-    AssetPlatforms as AssetPlatforms,
-    type AssetPlatformListResponse as AssetPlatformListResponse,
-    type AssetPlatformListParams as AssetPlatformListParams,
-  };
+  export { Companies as Companies };
 
-  export { TokenLists as TokenLists, type TokenListRetrieveAllResponse as TokenListRetrieveAllResponse };
+  export { Derivatives as Derivatives, type DerivativeGetResponse as DerivativeGetResponse };
+
+  export { ExchangeRates as ExchangeRates, type ExchangeRateGetResponse as ExchangeRateGetResponse };
 
   export {
     Exchanges as Exchanges,
-    type ExchangeRetrieveResponse as ExchangeRetrieveResponse,
-    type ExchangeListResponse as ExchangeListResponse,
-    type ExchangeListIDMapResponse as ExchangeListIDMapResponse,
-    type ExchangeRetrieveParams as ExchangeRetrieveParams,
-    type ExchangeListParams as ExchangeListParams,
-    type ExchangeListIDMapParams as ExchangeListIDMapParams,
-    type ExchangeRetrieveTickersParams as ExchangeRetrieveTickersParams,
+    type ExchangeGetResponse as ExchangeGetResponse,
+    type ExchangeGetIDResponse as ExchangeGetIDResponse,
+    type ExchangeGetListResponse as ExchangeGetListResponse,
+    type ExchangeGetParams as ExchangeGetParams,
+    type ExchangeGetIDParams as ExchangeGetIDParams,
+    type ExchangeGetListParams as ExchangeGetListParams,
   };
 
-  export { Derivatives as Derivatives, type TickersList as TickersList };
+  export { Global as Global, type GlobalGetResponse as GlobalGetResponse };
+
+  export { Key as Key, type KeyGetResponse as KeyGetResponse };
 
   export {
     NFTs as NFTs,
-    type NFTData as NFTData,
-    type NFTMarketChart as NFTMarketChart,
-    type NFTListResponse as NFTListResponse,
-    type NFTListWithMarketDataResponse as NFTListWithMarketDataResponse,
-    type NFTRetrieveTickersResponse as NFTRetrieveTickersResponse,
-    type NFTListParams as NFTListParams,
-    type NFTListWithMarketDataParams as NFTListWithMarketDataParams,
-    type NFTRetrieveMarketChartParams as NFTRetrieveMarketChartParams,
-  };
-
-  export { ExchangeRates as ExchangeRates, type ExchangeRateListResponse as ExchangeRateListResponse };
-
-  export {
-    Search as Search,
-    type SearchQueryResponse as SearchQueryResponse,
-    type SearchTrendingResponse as SearchTrendingResponse,
-    type SearchQueryParams as SearchQueryParams,
-    type SearchTrendingParams as SearchTrendingParams,
-  };
-
-  export {
-    Global as Global,
-    type GlobalRetrieveResponse as GlobalRetrieveResponse,
-    type GlobalRetrieveDecentralizedFinanceResponse as GlobalRetrieveDecentralizedFinanceResponse,
-    type GlobalRetrieveMarketCapChartResponse as GlobalRetrieveMarketCapChartResponse,
-    type GlobalRetrieveMarketCapChartParams as GlobalRetrieveMarketCapChartParams,
-  };
-
-  export {
-    Companies as Companies,
-    type CompanyRetrievePublicTreasuryResponse as CompanyRetrievePublicTreasuryResponse,
+    type NFTGetIDResponse as NFTGetIDResponse,
+    type NFTGetListResponse as NFTGetListResponse,
+    type NFTGetMarketsResponse as NFTGetMarketsResponse,
+    type NFTGetListParams as NFTGetListParams,
+    type NFTGetMarketsParams as NFTGetMarketsParams,
   };
 
   export { Onchain as Onchain };
+
+  export { Ping as Ping, type PingGetResponse as PingGetResponse };
+
+  export {
+    Search as Search,
+    type SearchGetResponse as SearchGetResponse,
+    type SearchGetParams as SearchGetParams,
+  };
+
+  export { Simple as Simple };
+
+  export { TokenLists as TokenLists, type TokenListGetAllJsonResponse as TokenListGetAllJsonResponse };
 }

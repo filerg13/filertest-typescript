@@ -2,18 +2,18 @@
 
 export {
   Exchanges,
-  type ExchangeRetrieveResponse,
-  type ExchangeListResponse,
-  type ExchangeListIDMapResponse,
-  type ExchangeRetrieveParams,
-  type ExchangeListParams,
-  type ExchangeListIDMapParams,
-  type ExchangeRetrieveTickersParams,
+  type ExchangeGetResponse,
+  type ExchangeGetIDResponse,
+  type ExchangeGetListResponse,
+  type ExchangeGetParams,
+  type ExchangeGetIDParams,
+  type ExchangeGetListParams,
 } from './exchanges';
+export { Tickers, type TickerGetResponse, type TickerGetParams } from './tickers';
 export {
   VolumeChart,
-  type VolumeChartRetrieveResponse,
-  type VolumeChartRetrieveRangeResponse,
-  type VolumeChartRetrieveParams,
-  type VolumeChartRetrieveRangeParams,
+  type VolumeChartGetResponse,
+  type VolumeChartGetRangeResponse,
+  type VolumeChartGetParams,
+  type VolumeChartGetRangeParams,
 } from './volume-chart';
