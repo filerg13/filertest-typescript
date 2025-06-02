@@ -4,33 +4,18 @@ It is generated with [Stainless](https://www.stainless.com/).
 
 ## Installation
 
-### Building
+### Direct invocation
 
-Because it's not published yet, clone the repo and build it:
-
-```sh
-git clone git@github.com:filerg13/filertest-typescript.git
-cd filertest-typescript
-./scripts/bootstrap
-./scripts/build
-```
-
-### Running
+You can run the MCP Server directly via `npx`:
 
 ```sh
-# set env vars as needed
 export COINGECKO_PRO_API_KEY="My Pro API Key"
 export COINGECKO_DEMO_API_KEY="My Demo API Key"
 export FILERTEST_ENVIRONMENT="pro"
-node ./packages/mcp-server/dist/index.js
+npx -y filertest-mcp@latest
 ```
 
-> [!NOTE]
-> Once this package is [published to npm](https://app.stainless.com/docs/guides/publish), this will become: `npx -y filertest-mcp`
-
 ### Via MCP Client
-
-[Build the project](#building) as mentioned above.
 
 There is a partial list of existing clients at [modelcontextprotocol.io](https://modelcontextprotocol.io/clients). If you already
 have a client, consult their documentation to install the MCP server.
@@ -41,12 +26,8 @@ For clients with a configuration JSON, it might look something like this:
 {
   "mcpServers": {
     "filertest_typescript_api": {
-      "command": "node",
-      "args": [
-        "/path/to/local/filertest-typescript/packages/mcp-server",
-        "--client=claude",
-        "--tools=dynamic"
-      ],
+      "command": "npx",
+      "args": ["-y", "filertest-mcp", "--client=claude", "--tools=dynamic"],
       "env": {
         "COINGECKO_PRO_API_KEY": "My Pro API Key",
         "COINGECKO_DEMO_API_KEY": "My Demo API Key",
