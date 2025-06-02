@@ -1,4 +1,4 @@
-import { createPathTagFunction, encodeURIPath } from 'filertest/internal/utils/path';
+import { createPathTagFunction, encodeURIPath } from 'filertest-typescript/internal/utils/path';
 import { inspect } from 'node:util';
 
 describe('path template tag function', () => {

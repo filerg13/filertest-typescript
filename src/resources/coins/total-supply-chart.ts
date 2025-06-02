@@ -5,7 +5,7 @@ import { APIPromise } from '../../core/api-promise';
 import { RequestOptions } from '../../internal/request-options';
 import { path } from '../../internal/utils/path';
 
-export class TotalSupplyChartResource extends APIResource {
+export class TotalSupplyChart extends APIResource {
   /**
    * This endpoint allows you to **query historical total supply of a coin by number
    * of days away from now based on provided coin ID**
@@ -13,17 +13,16 @@ export class TotalSupplyChartResource extends APIResource {
    * @example
    * ```ts
    * const totalSupplyChart =
-   *   await client.coins.totalSupplyChart.retrieveByID(
-   *     'bitcoin',
-   *     { days: 'days' },
-   *   );
+   *   await client.coins.totalSupplyChart.get('bitcoin', {
+   *     days: 'days',
+   *   });
    * ```
    */
-  retrieveByID(
+  get(
     id: string,
-    query: TotalSupplyChartRetrieveByIDParams,
+    query: TotalSupplyChartGetParams,
     options?: RequestOptions,
-  ): APIPromise<TotalSupplyChart> {
+  ): APIPromise<TotalSupplyChartGetResponse> {
     return this._client.get(path`/coins/${id}/total_supply_chart`, { query, ...options });
   }
 
@@ -33,27 +32,31 @@ export class TotalSupplyChartResource extends APIResource {
    *
    * @example
    * ```ts
-   * const totalSupplyChart =
-   *   await client.coins.totalSupplyChart.retrieveWithinTimeRangeByID(
-   *     'bitcoin',
-   *     { from: 0, to: 0 },
-   *   );
+   * const response =
+   *   await client.coins.totalSupplyChart.getRange('bitcoin', {
+   *     from: 0,
+   *     to: 0,
+   *   });
    * ```
    */
-  retrieveWithinTimeRangeByID(
+  getRange(
     id: string,
-    query: TotalSupplyChartRetrieveWithinTimeRangeByIDParams,
+    query: TotalSupplyChartGetRangeParams,
     options?: RequestOptions,
-  ): APIPromise<TotalSupplyChart> {
+  ): APIPromise<TotalSupplyChartGetRangeResponse> {
     return this._client.get(path`/coins/${id}/total_supply_chart/range`, { query, ...options });
   }
 }
 
-export interface TotalSupplyChart {
+export interface TotalSupplyChartGetResponse {
   total_supply?: Array<Array<number | string>>;
 }
 
-export interface TotalSupplyChartRetrieveByIDParams {
+export interface TotalSupplyChartGetRangeResponse {
+  total_supply?: Array<Array<number | string>>;
+}
+
+export interface TotalSupplyChartGetParams {
   /**
    * data up to number of days ago Valid values: any integer or `max`
    */
@@ -65,7 +68,7 @@ export interface TotalSupplyChartRetrieveByIDParams {
   interval?: 'daily';
 }
 
-export interface TotalSupplyChartRetrieveWithinTimeRangeByIDParams {
+export interface TotalSupplyChartGetRangeParams {
   /**
    * starting date in UNIX timestamp
    */
@@ -77,10 +80,11 @@ export interface TotalSupplyChartRetrieveWithinTimeRangeByIDParams {
   to: number;
 }
 
-export declare namespace TotalSupplyChartResource {
+export declare namespace TotalSupplyChart {
   export {
-    type TotalSupplyChart as TotalSupplyChart,
-    type TotalSupplyChartRetrieveByIDParams as TotalSupplyChartRetrieveByIDParams,
-    type TotalSupplyChartRetrieveWithinTimeRangeByIDParams as TotalSupplyChartRetrieveWithinTimeRangeByIDParams,
+    type TotalSupplyChartGetResponse as TotalSupplyChartGetResponse,
+    type TotalSupplyChartGetRangeResponse as TotalSupplyChartGetRangeResponse,
+    type TotalSupplyChartGetParams as TotalSupplyChartGetParams,
+    type TotalSupplyChartGetRangeParams as TotalSupplyChartGetRangeParams,
   };
 }

@@ -55,12 +55,12 @@ $ cd filertest-typescript
 # With yarn
 $ yarn link
 $ cd ../my-package
-$ yarn link filertest
+$ yarn link filertest-typescript
 
 # With pnpm
 $ pnpm link --global
 $ cd ../my-package
-$ pnpm link -—global filertest
+$ pnpm link -—global filertest-typescript
 ```
 
 ## Running tests

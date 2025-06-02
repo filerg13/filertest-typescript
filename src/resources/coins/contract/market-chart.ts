@@ -1,7 +1,6 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../../../core/resource';
-import * as MarketChartAPI from '../market-chart';
 import { APIPromise } from '../../../core/api-promise';
 import { RequestOptions } from '../../../internal/request-options';
 import { path } from '../../../internal/utils/path';
@@ -15,17 +14,17 @@ export class MarketChart extends APIResource {
    * @example
    * ```ts
    * const marketChart =
-   *   await client.coins.contract.marketChart.retrieveByTokenAddress(
+   *   await client.coins.contract.marketChart.get(
    *     '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48',
    *     { id: 'ethereum', days: 'days', vs_currency: 'usd' },
    *   );
    * ```
    */
-  retrieveByTokenAddress(
+  get(
     contractAddress: string,
-    params: MarketChartRetrieveByTokenAddressParams,
+    params: MarketChartGetParams,
     options?: RequestOptions,
-  ): APIPromise<MarketChartAPI.MarketChart> {
+  ): APIPromise<MarketChartGetResponse> {
     const { id, ...query } = params;
     return this._client.get(path`/coins/${id}/contract/${contractAddress}/market_chart`, {
       query,
@@ -40,18 +39,18 @@ export class MarketChart extends APIResource {
    *
    * @example
    * ```ts
-   * const marketChartRange =
-   *   await client.coins.contract.marketChart.retrieveWithinTimeRangeByTokenAddress(
+   * const response =
+   *   await client.coins.contract.marketChart.getRange(
    *     '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48',
    *     { id: 'ethereum', from: 0, to: 0, vs_currency: 'usd' },
    *   );
    * ```
    */
-  retrieveWithinTimeRangeByTokenAddress(
+  getRange(
     contractAddress: string,
-    params: MarketChartRetrieveWithinTimeRangeByTokenAddressParams,
+    params: MarketChartGetRangeParams,
     options?: RequestOptions,
-  ): APIPromise<MarketChartAPI.MarketChartRange> {
+  ): APIPromise<MarketChartGetRangeResponse> {
     const { id, ...query } = params;
     return this._client.get(path`/coins/${id}/contract/${contractAddress}/market_chart/range`, {
       query,
@@ -60,7 +59,23 @@ export class MarketChart extends APIResource {
   }
 }
 
-export interface MarketChartRetrieveByTokenAddressParams {
+export interface MarketChartGetResponse {
+  market_caps?: Array<Array<number>>;
+
+  prices?: Array<Array<number>>;
+
+  total_volumes?: Array<Array<number>>;
+}
+
+export interface MarketChartGetRangeResponse {
+  market_caps?: Array<Array<number>>;
+
+  prices?: Array<Array<number>>;
+
+  total_volumes?: Array<Array<number>>;
+}
+
+export interface MarketChartGetParams {
   /**
    * Path param: asset platform ID \*refers to
    * [`/asset_platforms`](/reference/asset-platforms-list).
@@ -110,7 +125,7 @@ export interface MarketChartRetrieveByTokenAddressParams {
     | '18';
 }
 
-export interface MarketChartRetrieveWithinTimeRangeByTokenAddressParams {
+export interface MarketChartGetRangeParams {
   /**
    * Path param: asset platform ID \*refers to
    * [`/asset_platforms`](/reference/asset-platforms-list)
@@ -166,7 +181,9 @@ export interface MarketChartRetrieveWithinTimeRangeByTokenAddressParams {
 
 export declare namespace MarketChart {
   export {
-    type MarketChartRetrieveByTokenAddressParams as MarketChartRetrieveByTokenAddressParams,
-    type MarketChartRetrieveWithinTimeRangeByTokenAddressParams as MarketChartRetrieveWithinTimeRangeByTokenAddressParams,
+    type MarketChartGetResponse as MarketChartGetResponse,
+    type MarketChartGetRangeResponse as MarketChartGetRangeResponse,
+    type MarketChartGetParams as MarketChartGetParams,
+    type MarketChartGetRangeParams as MarketChartGetRangeParams,
   };
 }

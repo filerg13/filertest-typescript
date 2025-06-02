@@ -1,28 +1,32 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-export { Dexes, type DexListResponse, type DexListParams, type DexRetrievePoolsParams } from './dexes';
-export { Networks, type NetworkListResponse, type NetworkListParams } from './networks';
-export { NewPools, type NewPoolListParams } from './new-pools';
+export {
+  Dexes,
+  type DexGetResponse,
+  type DexGetPoolsResponse,
+  type DexGetParams,
+  type DexGetPoolsParams,
+} from './dexes';
+export { Networks, type NetworkGetResponse, type NetworkGetParams } from './networks';
+export {
+  NewPools,
+  type NewPoolGetResponse,
+  type NewPoolGetNetworkResponse,
+  type NewPoolGetParams,
+  type NewPoolGetNetworkParams,
+} from './new-pools';
 export {
   Pools,
-  type PoolInfo,
-  type PoolRetrieveResponse,
-  type PoolRetrieveTradesResponse,
-  type PoolRetrieveParams,
-  type PoolListParams,
-  type PoolRetrieveInfoParams,
-  type PoolRetrieveTradesParams,
-} from './pools';
+  type PoolGetResponse,
+  type PoolGetAddressResponse,
+  type PoolGetParams,
+  type PoolGetAddressParams,
+} from './pools/index';
+export { Tokens, type TokenGetAddressResponse, type TokenGetAddressParams } from './tokens/index';
 export {
-  Tokens,
-  type Token,
-  type TokenInfo,
-  type TokenRetrieveTopHoldersResponse,
-  type TokenRetrieveTradesResponse,
-  type TokenRetrieveParams,
-  type TokenRetrieveInfoParams,
-  type TokenRetrievePoolsParams,
-  type TokenRetrieveTopHoldersParams,
-  type TokenRetrieveTradesParams,
-} from './tokens';
-export { TrendingPools, type Pool, type TrendingPoolListParams } from './trending-pools';
+  TrendingPools,
+  type TrendingPoolGetResponse,
+  type TrendingPoolGetNetworkResponse,
+  type TrendingPoolGetParams,
+  type TrendingPoolGetNetworkParams,
+} from './trending-pools';

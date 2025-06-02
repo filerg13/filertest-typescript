@@ -11,13 +11,10 @@ export class List extends APIResource {
    *
    * @example
    * ```ts
-   * const lists = await client.coins.list.retrieve();
+   * const lists = await client.coins.list.get();
    * ```
    */
-  retrieve(
-    query: ListRetrieveParams | null | undefined = {},
-    options?: RequestOptions,
-  ): APIPromise<ListRetrieveResponse> {
+  get(query: ListGetParams | null | undefined = {}, options?: RequestOptions): APIPromise<ListGetResponse> {
     return this._client.get('/coins/list', { query, ...options });
   }
 
@@ -27,19 +24,18 @@ export class List extends APIResource {
    *
    * @example
    * ```ts
-   * const response =
-   *   await client.coins.list.retrieveRecentlyAdded();
+   * const response = await client.coins.list.getNew();
    * ```
    */
-  retrieveRecentlyAdded(options?: RequestOptions): APIPromise<ListRetrieveRecentlyAddedResponse> {
+  getNew(options?: RequestOptions): APIPromise<ListGetNewResponse> {
     return this._client.get('/coins/list/new', options);
   }
 }
 
-export type ListRetrieveResponse = Array<ListRetrieveResponse.ListRetrieveResponseItem>;
+export type ListGetResponse = Array<ListGetResponse.ListGetResponseItem>;
 
-export namespace ListRetrieveResponse {
-  export interface ListRetrieveResponseItem {
+export namespace ListGetResponse {
+  export interface ListGetResponseItem {
     /**
      * coin ID
      */
@@ -62,11 +58,10 @@ export namespace ListRetrieveResponse {
   }
 }
 
-export type ListRetrieveRecentlyAddedResponse =
-  Array<ListRetrieveRecentlyAddedResponse.ListRetrieveRecentlyAddedResponseItem>;
+export type ListGetNewResponse = Array<ListGetNewResponse.ListGetNewResponseItem>;
 
-export namespace ListRetrieveRecentlyAddedResponse {
-  export interface ListRetrieveRecentlyAddedResponseItem {
+export namespace ListGetNewResponse {
+  export interface ListGetNewResponseItem {
     /**
      * coin ID
      */
@@ -89,7 +84,7 @@ export namespace ListRetrieveRecentlyAddedResponse {
   }
 }
 
-export interface ListRetrieveParams {
+export interface ListGetParams {
   /**
    * include platform and token's contract addresses, default: false
    */
@@ -103,8 +98,8 @@ export interface ListRetrieveParams {
 
 export declare namespace List {
   export {
-    type ListRetrieveResponse as ListRetrieveResponse,
-    type ListRetrieveRecentlyAddedResponse as ListRetrieveRecentlyAddedResponse,
-    type ListRetrieveParams as ListRetrieveParams,
+    type ListGetResponse as ListGetResponse,
+    type ListGetNewResponse as ListGetNewResponse,
+    type ListGetParams as ListGetParams,
   };
 }

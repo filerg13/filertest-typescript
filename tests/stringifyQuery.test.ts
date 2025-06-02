@@ -1,6 +1,6 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-import { Filertest } from 'filertest';
+import { Filertest } from 'filertest-typescript';
 
 const { stringifyQuery } = Filertest.prototype as any;
 

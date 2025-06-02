@@ -1,6 +1,6 @@
 import fs from 'fs';
-import type { ResponseLike } from 'filertest/internal/to-file';
-import { toFile } from 'filertest/core/uploads';
+import type { ResponseLike } from 'filertest-typescript/internal/to-file';
+import { toFile } from 'filertest-typescript/core/uploads';
 import { File } from 'node:buffer';
 
 class MyClass {
@@ -97,7 +97,7 @@ describe('missing File error message', () => {
   });
 
   test('is thrown', async () => {
-    const uploads = await import('filertest/core/uploads');
+    const uploads = await import('filertest-typescript/core/uploads');
     await expect(
       uploads.toFile(mockResponse({ url: 'https://example.com/my/audio.mp3' })),
     ).rejects.toMatchInlineSnapshot(

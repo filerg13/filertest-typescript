@@ -1,5 +1,5 @@
 {
-  "name": "filertest",
+  "name": "filertest-typescript",
   "version": "0.0.1-alpha.0",
   "description": "The official TypeScript library for the Filertest API",
   "author": "Filertest <>",
@@ -47,8 +47,8 @@
     "typescript": "5.8.3"
   },
   "imports": {
-    "filertest": ".",
-    "filertest/*": "./src/*"
+    "filertest-typescript": ".",
+    "filertest-typescript/*": "./src/*"
   },
   "exports": {
     ".": {

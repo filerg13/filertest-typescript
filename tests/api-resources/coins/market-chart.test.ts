@@ -1,16 +1,16 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-import Filertest from 'filertest';
+import Filertest from 'filertest-typescript';
 
-const client = new Filertest({ baseURL: process.env['TEST_API_BASE_URL'] ?? 'http://127.0.0.1:4010' });
+const client = new Filertest({
+  proAPIKey: 'My Pro API Key',
+  baseURL: process.env['TEST_API_BASE_URL'] ?? 'http://127.0.0.1:4010',
+});
 
 describe('resource marketChart', () => {
   // skipped: tests are disabled for the time being
-  test.skip('retrieveByID: only required params', async () => {
-    const responsePromise = client.coins.marketChart.retrieveByID('bitcoin', {
-      days: 'days',
-      vs_currency: 'usd',
-    });
+  test.skip('get: only required params', async () => {
+    const responsePromise = client.coins.marketChart.get('bitcoin', { days: 'days', vs_currency: 'usd' });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -21,8 +21,8 @@ describe('resource marketChart', () => {
   });
 
   // skipped: tests are disabled for the time being
-  test.skip('retrieveByID: required and optional params', async () => {
-    const response = await client.coins.marketChart.retrieveByID('bitcoin', {
+  test.skip('get: required and optional params', async () => {
+    const response = await client.coins.marketChart.get('bitcoin', {
       days: 'days',
       vs_currency: 'usd',
       interval: '5m',
@@ -31,8 +31,8 @@ describe('resource marketChart', () => {
   });
 
   // skipped: tests are disabled for the time being
-  test.skip('retrieveWithinTimeRangeByID: only required params', async () => {
-    const responsePromise = client.coins.marketChart.retrieveWithinTimeRangeByID('bitcoin', {
+  test.skip('getRange: only required params', async () => {
+    const responsePromise = client.coins.marketChart.getRange('bitcoin', {
       from: 0,
       to: 0,
       vs_currency: 'usd',
@@ -47,8 +47,8 @@ describe('resource marketChart', () => {
   });
 
   // skipped: tests are disabled for the time being
-  test.skip('retrieveWithinTimeRangeByID: required and optional params', async () => {
-    const response = await client.coins.marketChart.retrieveWithinTimeRangeByID('bitcoin', {
+  test.skip('getRange: required and optional params', async () => {
+    const response = await client.coins.marketChart.getRange('bitcoin', {
       from: 0,
       to: 0,
       vs_currency: 'usd',
