@@ -1,5 +1,7 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
+import { asTextContentResult } from 'filertest-mcp/tools/types';
+
 import { Tool } from '@modelcontextprotocol/sdk/types.js';
 import type { Metadata } from '../../../../';
 import Filertest from 'filertest-typescript';
@@ -61,9 +63,9 @@ export const tool: Tool = {
   },
 };
 
-export const handler = (client: Filertest, args: Record<string, unknown> | undefined) => {
+export const handler = async (client: Filertest, args: Record<string, unknown> | undefined) => {
   const { timeframe, ...body } = args as any;
-  return client.onchain.networks.pools.ohlcv.getTimeframe(timeframe, body);
+  return asTextContentResult(await client.onchain.networks.pools.ohlcv.getTimeframe(timeframe, body));
 };
 
 export default { metadata, tool, handler };
