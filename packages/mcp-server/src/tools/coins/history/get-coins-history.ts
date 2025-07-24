@@ -42,6 +42,9 @@ export const tool: Tool = {
     },
     required: ['id', 'date'],
   },
+  annotations: {
+    readOnlyHint: true,
+  },
 };
 
 export const handler = async (client: Filertest, args: Record<string, unknown> | undefined) => {

@@ -38,6 +38,9 @@ export const tool: Tool = {
     },
     required: ['id', 'days'],
   },
+  annotations: {
+    readOnlyHint: true,
+  },
 };
 
 export const handler = async (client: Filertest, args: Record<string, unknown> | undefined) => {
