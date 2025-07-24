@@ -46,6 +46,9 @@ export const tool: Tool = {
     },
     required: ['network', 'address'],
   },
+  annotations: {
+    readOnlyHint: true,
+  },
 };
 
 export const handler = async (client: Filertest, args: Record<string, unknown> | undefined) => {
