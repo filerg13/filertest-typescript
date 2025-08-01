@@ -2,7 +2,7 @@
 
 import type { Filertest } from '../client';
 
-export class APIResource {
+export abstract class APIResource {
   protected _client: Filertest;
 
   constructor(client: Filertest) {

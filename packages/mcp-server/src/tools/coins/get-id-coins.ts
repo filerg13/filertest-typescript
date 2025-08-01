@@ -1,7 +1,8 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
+import { Metadata, asTextContentResult } from 'filertest-mcp/tools/types';
+
 import { Tool } from '@modelcontextprotocol/sdk/types.js';
-import type { Metadata } from '../';
 import Filertest from 'filertest-typescript';
 
 export const metadata: Metadata = {
@@ -54,12 +55,16 @@ export const tool: Tool = {
         description: 'include tickers data, default: true',
       },
     },
+    required: ['id'],
+  },
+  annotations: {
+    readOnlyHint: true,
   },
 };
 
-export const handler = (client: Filertest, args: Record<string, unknown> | undefined) => {
+export const handler = async (client: Filertest, args: Record<string, unknown> | undefined) => {
   const { id, ...body } = args as any;
-  return client.coins.getID(id, body);
+  return asTextContentResult(await client.coins.getID(id, body));
 };
 
 export default { metadata, tool, handler };

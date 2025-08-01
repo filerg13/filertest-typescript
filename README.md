@@ -1,6 +1,6 @@
 # Filertest TypeScript API Library
 
-[![NPM version](https://img.shields.io/npm/v/filertest-typescript.svg)](https://npmjs.org/package/filertest-typescript) ![npm bundle size](https://img.shields.io/bundlephobia/minzip/filertest-typescript)
+[![NPM version](<https://img.shields.io/npm/v/filertest-typescript.svg?label=npm%20(stable)>)](https://npmjs.org/package/filertest-typescript) ![npm bundle size](https://img.shields.io/bundlephobia/minzip/filertest-typescript)
 
 This library provides convenient access to the Filertest REST API from server-side TypeScript or JavaScript.
 
@@ -11,11 +11,8 @@ It is generated with [Stainless](https://www.stainless.com/).
 ## Installation
 
 ```sh
-npm install git+ssh://git@github.com:stainless-sdks/filertest-typescript.git
+npm install filertest-typescript
 ```
-
-> [!NOTE]
-> Once this package is [published to npm](https://app.stainless.com/docs/guides/publish), this will become: `npm install filertest-typescript`
 
 ## Usage
 
@@ -30,13 +27,9 @@ const client = new Filertest({
   environment: 'demo', // defaults to 'pro'
 });
 
-async function main() {
-  const price = await client.simple.price.get({ vs_currencies: 'usd', ids: 'bitcoin' });
+const price = await client.simple.price.get({ vs_currencies: 'usd', ids: 'bitcoin' });
 
-  console.log(price.last_updated_at);
-}
-
-main();
+console.log(price.last_updated_at);
 ```
 
 ### Request & Response types
@@ -52,12 +45,8 @@ const client = new Filertest({
   environment: 'demo', // defaults to 'pro'
 });
 
-async function main() {
-  const params: Filertest.Simple.PriceGetParams = { vs_currencies: 'usd', ids: 'bitcoin' };
-  const price: Filertest.Simple.PriceGetResponse = await client.simple.price.get(params);
-}
-
-main();
+const params: Filertest.Simple.PriceGetParams = { vs_currencies: 'usd', ids: 'bitcoin' };
+const price: Filertest.Simple.PriceGetResponse = await client.simple.price.get(params);
 ```
 
 Documentation for each method, request param, and response field are available in docstrings and will appear on hover in most modern editors.
@@ -70,19 +59,15 @@ a subclass of `APIError` will be thrown:
 
 <!-- prettier-ignore -->
 ```ts
-async function main() {
-  const price = await client.simple.price.get({ vs_currencies: 'usd', ids: 'bitcoin' }).catch(async (err) => {
-    if (err instanceof Filertest.APIError) {
-      console.log(err.status); // 400
-      console.log(err.name); // BadRequestError
-      console.log(err.headers); // {server: 'nginx', ...}
-    } else {
-      throw err;
-    }
-  });
-}
-
-main();
+const price = await client.simple.price.get({ vs_currencies: 'usd', ids: 'bitcoin' }).catch(async (err) => {
+  if (err instanceof Filertest.APIError) {
+    console.log(err.status); // 400
+    console.log(err.name); // BadRequestError
+    console.log(err.headers); // {server: 'nginx', ...}
+  } else {
+    throw err;
+  }
+});
 ```
 
 Error codes are as follows:
@@ -242,9 +227,8 @@ parameter. This library doesn't validate at runtime that the request matches the
 send will be sent as-is.
 
 ```ts
-client.foo.create({
-  foo: 'my_param',
-  bar: 12,
+client.simple.price.get({
+  // ...
   // @ts-expect-error baz is not yet public
   baz: 'undocumented option',
 });
@@ -353,7 +337,7 @@ This package generally follows [SemVer](https://semver.org/spec/v2.0.0.html) con
 
 We take backwards-compatibility seriously and work hard to ensure you can rely on a smooth upgrade experience.
 
-We are keen for your feedback; please open an [issue](https://www.github.com/stainless-sdks/filertest-typescript/issues) with questions, bugs, or suggestions.
+We are keen for your feedback; please open an [issue](https://www.github.com/filerg13/filertest-typescript/issues) with questions, bugs, or suggestions.
 
 ## Requirements
 
